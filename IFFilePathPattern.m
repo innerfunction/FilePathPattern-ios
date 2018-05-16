@@ -125,7 +125,9 @@ static NSMutableDictionary<NSString *, IFMatcherBlock> *IFFilePathPattern_Compil
             if ([result numberOfRanges] - 1 != [names count]) {
                 // Shouldn't happen...
                 [NSException raise:@"IFBadFilePathPattern"
-                            format:@"Number of captured groups (%lu) doesn't match expected number of names (%lu)", [result numberOfRanges] - 1, [names count]];
+                            format:@"Number of captured groups (%lu) doesn't match expected number of names (%lu)",
+                                (unsigned long)[result numberOfRanges] - 1,
+                                (unsigned long)[names count]];
             }
             // We will have one name for each matching group in the regex result.
             // Iterate over each name, extract the corresponding value and plug into the result.
