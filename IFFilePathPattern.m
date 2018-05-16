@@ -30,7 +30,7 @@ typedef NSString* (^NSStringPatternReplaceBlock) (NSString *group);
 - (NSString *)stringByReplacingPattern:(NSString *)pattern withBlock:(NSStringPatternReplaceBlock)replaceBlock;
 /// Test whether the string matches a pattern.
 - (BOOL)stringMatchesPattern:(NSString *)pattern;
-/// Return the offset to a sequence within the string; returns -1 if no match.
+/// Return the offset to a sequence within the string, or NSNotFound if the sequence isn't found.
 - (NSUInteger)indexOfString:(NSString *)string;
 /// Return an NSRange for the entire string.
 - (NSRange)range;
@@ -81,7 +81,7 @@ static NSMutableDictionary<NSString *, IFMatcherBlock> *IFFilePathPattern_Compil
         NSString *name, *pattern;
         // Check if the matched group includes a matching pattern.
         NSUInteger idx = [group indexOfString:@":"];
-        if (idx > 0) {
+        if (idx != NSNotFound) {
             name = [group substringToIndex:idx];
             pattern = [NSString stringWithFormat:@"(%@)", [group substringFromIndex:idx + 1]];
         }
@@ -213,11 +213,7 @@ static NSMutableDictionary<NSString *, IFMatcherBlock> *IFFilePathPattern_Compil
 }
 
 - (NSUInteger)indexOfString:(NSString *)string {
-    NSRange range = [self rangeOfString:string];
-    if (range.length == [string length]) {
-        return range.location;
-    }
-    return -1;
+    return [self rangeOfString:string].location;
 }
 
 - (NSRange)range {
